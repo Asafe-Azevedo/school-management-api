@@ -1,0 +1,6 @@
+CREATE TABLE turmas (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    capacidade INT NOT NULL,
+    serie VARCHAR(50) NOT NULL
+);
