@@ -2,6 +2,7 @@ package com.school.api.aluno.disciplina;
 
 
 import com.school.api.aluno.disciplina.dto.DadosCadastroDisciplina;
+import com.school.api.aluno.disciplina.dto.DadosDetalhamentoDisciplina;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +21,8 @@ public class DisciplinaController {
     }
 
     @PostMapping
-    public ResponseEntity<Disciplina> cadastrar(@RequestBody DadosCadastroDisciplina dados) {
+    public ResponseEntity<DadosDetalhamentoDisciplina> cadastrar(@RequestBody DadosCadastroDisciplina dados) {
         Disciplina disciplina = service.cadastrar(dados);
-        return ResponseEntity.status(HttpStatus.CREATED).body(disciplina);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoDisciplina(disciplina));
     }
 }

@@ -39,9 +39,9 @@ public class ProfessorController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<Professor> atualizar(@Valid @PathVariable Long id, @RequestBody DadosAtualizacaoProfessores dadosAtualizacaoProfessores){
+    public ResponseEntity<DadosDetalhamentoProfessor> atualizar(@Valid @PathVariable Long id, @RequestBody DadosAtualizacaoProfessores dadosAtualizacaoProfessores){
         Professor professor = service.atualizar(id, dadosAtualizacaoProfessores);
-        return ResponseEntity.ok(professor);
+        return ResponseEntity.ok(new DadosDetalhamentoProfessor(professor));
     }
 
     @DeleteMapping("/{id}")

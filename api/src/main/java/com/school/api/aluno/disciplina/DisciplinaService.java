@@ -2,6 +2,7 @@ package com.school.api.aluno.disciplina;
 
 import com.school.api.aluno.disciplina.dto.DadosCadastroDisciplina;
 import com.school.api.infra.erros.NotFoundException;
+import com.school.api.infra.erros.professores.ProfessorNaoEncontradoException;
 import com.school.api.professores.Professor;
 import com.school.api.professores.ProfessorRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class DisciplinaService {
 
     public Disciplina cadastrar(DadosCadastroDisciplina dados){
         Professor professor = professorRepository.findById(dados.professorId())
-                .orElseThrow(() -> new NotFoundException("Professor não encontrado"));
+                .orElseThrow(ProfessorNaoEncontradoException::new);
 
         Disciplina disciplina = new Disciplina(dados.nome(), professor);
         return disciplinaRepository.save(disciplina);

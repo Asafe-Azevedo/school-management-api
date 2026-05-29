@@ -1,5 +1,6 @@
 package com.school.api.aluno.disciplina;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.school.api.professores.Professor;
 import com.school.api.turma.Turma;
 import jakarta.persistence.*;
@@ -29,6 +30,7 @@ public class Disciplina {
     @JoinColumn(name = "professor_id")
     private Professor professor;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "disciplinas")
     private List<Turma> turmas = new ArrayList<>();
 

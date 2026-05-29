@@ -1,5 +1,6 @@
 package com.school.api.turma;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.school.api.aluno.Aluno;
 import com.school.api.aluno.disciplina.Disciplina;
 import jakarta.persistence.*;
@@ -29,6 +30,7 @@ public class Turma {
     @Enumerated(EnumType.STRING)
     private Serie serie;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "turma")
     private List<Aluno> alunos = new ArrayList<>();
 
