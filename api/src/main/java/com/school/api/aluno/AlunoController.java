@@ -4,6 +4,9 @@ import com.school.api.aluno.dto.DadosAtualizacaoAlunos;
 import com.school.api.aluno.dto.DadosCadastroAlunos;
 import com.school.api.aluno.dto.DadosDetalhamentoAluno;
 import com.school.api.aluno.dto.DadosListagemAlunos;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +18,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RequestMapping("/alunos")
 @RestController
+@Tag(
+        name = "Alunos",
+        description = "Endpoints para gerencimento de alunos"
+)
 public class AlunoController {
 
     private final AlunoService service;
@@ -25,6 +32,22 @@ public class AlunoController {
 
     @PostMapping
     @Transactional
+    @Operation(
+            summary = "Cadastrar aluno",
+            description = "Realiza o cadastro de um aluno e o distribui automaticamente em uma turma disponível"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Aluno cadastrado com sucesso"
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "Dados inválidos"
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Turma não encontrada"
+    )
     public ResponseEntity<DadosDetalhamentoAluno> cadastrar(@RequestBody @Valid DadosCadastroAlunos dados, UriComponentsBuilder uriComponentsBuilder){
         Aluno aluno = service.cadastrar(dados);
         var uri = uriComponentsBuilder.path("/alunos/{id}").buildAndExpand(aluno.getId()).toUri();

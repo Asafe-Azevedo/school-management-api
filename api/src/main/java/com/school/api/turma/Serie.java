@@ -1,5 +1,8 @@
 package com.school.api.turma;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Séries disponíveis")
 public enum Serie {
 
     PRIMEIRO_ANO,
