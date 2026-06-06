@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class TurmaController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{turmaId}/disciplinas/{disciplinaId}")
     @Operation(
             summary = "Adicionar disciplina à turma",
@@ -46,6 +48,7 @@ public class TurmaController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
     @GetMapping("/{id}/disciplinas")
     @Operation(
             summary = "Listar disciplinas da turma",

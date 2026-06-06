@@ -14,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -32,6 +33,7 @@ public class AlunoController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Transactional
     @Operation(
@@ -56,6 +58,7 @@ public class AlunoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoAluno(aluno));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
     @Operation(
             summary = "Listar alunos",
             description = "Retorna uma lista paginada dos alunos ativos cadastrados"
@@ -66,6 +69,7 @@ public class AlunoController {
         return ResponseEntity.ok(service.listar(pageable));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
     @Operation(
             summary = "Detalhar aluno",
             description = "Retorna os dados básicos de um aluno a partir de seu identificador"
@@ -77,6 +81,7 @@ public class AlunoController {
         return ResponseEntity.ok(service.detalhar(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Atualizar aluno",
             description = """
@@ -99,6 +104,7 @@ public class AlunoController {
         return ResponseEntity.ok(new DadosDetalhamentoAluno(aluno));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(
             summary = "Excluir aluno",
             description = """

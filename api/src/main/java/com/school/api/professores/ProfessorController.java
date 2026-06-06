@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -31,6 +32,7 @@ public class ProfessorController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Transactional
     @Operation(
@@ -52,6 +54,7 @@ public class ProfessorController {
        return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoProfessor(professor));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
     @GetMapping
     @Operation(
             summary = "Listar os professores",
@@ -80,6 +83,7 @@ public class ProfessorController {
         return ResponseEntity.ok(new DadosDetalhamentoProfessor(professor));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Transactional
     @Operation(
