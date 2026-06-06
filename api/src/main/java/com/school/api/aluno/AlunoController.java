@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +62,7 @@ public class AlunoController {
     )
     @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
     @GetMapping
-    public ResponseEntity<Page<DadosListagemAlunos>> listar(Pageable pageable){
+    public ResponseEntity<Page<DadosListagemAlunos>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable pageable){
         return ResponseEntity.ok(service.listar(pageable));
     }
 
