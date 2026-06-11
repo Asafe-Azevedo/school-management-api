@@ -57,7 +57,7 @@ public class TurmaController {
     @ApiResponse(responseCode = "200", description = "Disciplinas encontradas")
     @ApiResponse(responseCode = "404", description = "Turma não encontrada")
     public ResponseEntity<List<String>> listarDisciplinas(@PathVariable Long id){
-        return ResponseEntity.ok(service.listarDiscilinas(id));
+        return ResponseEntity.ok(service.listarDisciplinas(id));
     }
 
     @GetMapping("/{id}")

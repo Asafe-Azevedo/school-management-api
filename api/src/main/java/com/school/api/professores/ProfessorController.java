@@ -34,7 +34,6 @@ public class ProfessorController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    @Transactional
     @Operation(
             summary = "Cadastrar os professores",
             description = """
@@ -51,7 +50,7 @@ public class ProfessorController {
     public ResponseEntity<DadosDetalhamentoProfessor> cadastrar(@RequestBody @Valid DadosCadastroProfessores dados, UriComponentsBuilder uriComponentsBuilder){
        Professor professor = service.cadastrar(dados);
        var uri = uriComponentsBuilder.path("/professores/{id}").buildAndExpand(professor.getId()).toUri();
-       return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoProfessor(professor));
+       return ResponseEntity.created(uri).body(new DadosDetalhamentoProfessor(professor));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
@@ -66,7 +65,6 @@ public class ProfessorController {
     }
 
     @PutMapping("/{id}")
-    @Transactional
     @Operation(
             summary = "Atualizar professor",
             description = """
@@ -85,7 +83,6 @@ public class ProfessorController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    @Transactional
     @Operation(
             summary = "Excluir os professores",
             description = """

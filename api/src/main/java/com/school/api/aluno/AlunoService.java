@@ -7,6 +7,7 @@ import com.school.api.aluno.dto.DadosListagemAlunos;
 import com.school.api.endereco.Endereco;
 import com.school.api.endereco.EnderecoService;
 import com.school.api.endereco.dto.DadosEndereco;
+import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.infra.erros.alunos.AlunoNaoEncontradoException;
 import com.school.api.turma.Turma;
 import com.school.api.turma.TurmaRepository;
@@ -14,27 +15,29 @@ import com.school.api.util.FormatadorUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AlunoService {
 
-    private final AlunoRespository repository;
+    private final AlunoRepository repository;
     private final EnderecoService enderecoService;
     private final TurmaRepository turmaRepository;
 
-    public AlunoService(AlunoRespository respository, EnderecoService enderecoService, TurmaRepository turmaRepository){
+    public AlunoService(AlunoRepository respository, EnderecoService enderecoService, TurmaRepository turmaRepository){
         this.repository = respository;
         this.enderecoService = enderecoService;
         this.turmaRepository = turmaRepository;
     }
 
+    @Transactional
     public Aluno cadastrar(DadosCadastroAlunos dadosCadastroAlunoss){
 
 
         String cpfFormatado = FormatadorUtils.formatarCpf(dadosCadastroAlunoss.cpf());
 
         if (repository.existsByCpf(cpfFormatado)) {
-            throw new IllegalArgumentException("CPF já cadastrado");
+            throw new RegraNegocioException("CPF já cadastrado");
         }
 
         DadosEndereco enderecoPreenchido =
@@ -74,6 +77,7 @@ public class AlunoService {
 
     }
 
+    @Transactional
     public Aluno atualizar(Long id, DadosAtualizacaoAlunos dados) {
         Aluno aluno = repository.findById(id).orElseThrow(AlunoNaoEncontradoException::new);
 
@@ -93,8 +97,9 @@ public class AlunoService {
         return aluno;
     }
 
+    @Transactional
     public void excluir(Long id){
-        Aluno aluno = repository.getReferenceById(id);
+        Aluno aluno = repository.findById(id).orElseThrow(AlunoNaoEncontradoException::new);
         aluno.excluir();
     }
 }

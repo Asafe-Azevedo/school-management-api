@@ -2,6 +2,7 @@ package com.school.api.turma;
 
 import com.school.api.aluno.disciplina.Disciplina;
 import com.school.api.aluno.disciplina.DisciplinaRepository;
+import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.infra.erros.disciplina.DisciplinaNaoEncontradaException;
 import com.school.api.infra.erros.turmas.TurmaNaoEncontradaException;
 import com.school.api.turma.dto.DadosTurmaDetalhada;
@@ -31,7 +32,7 @@ public class TurmaService {
                 .orElseThrow(DisciplinaNaoEncontradaException::new);
 
         if(turma.getDisciplinas().contains(disciplina)){
-            throw new IllegalArgumentException("Disciplina já vinculada à turma");
+            throw new RegraNegocioException("Disciplina já vinculada à turma");
         }
 
         turma.getDisciplinas().add(disciplina);
@@ -39,7 +40,7 @@ public class TurmaService {
         turmaRepository.save(turma);
     }
 
-    public List<String> listarDiscilinas(Long turmaId){
+    public List<String> listarDisciplinas(Long turmaId){
         Turma turma = turmaRepository.findById(turmaId)
                 .orElseThrow(TurmaNaoEncontradaException::new);
 

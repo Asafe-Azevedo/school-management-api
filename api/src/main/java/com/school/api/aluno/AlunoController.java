@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,7 +34,6 @@ public class AlunoController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    @Transactional
     @Operation(
             summary = "Cadastrar aluno",
             description = """
@@ -55,7 +53,7 @@ public class AlunoController {
     public ResponseEntity<DadosDetalhamentoAluno> cadastrar(@RequestBody @Valid DadosCadastroAlunos dados, UriComponentsBuilder uriComponentsBuilder){
         Aluno aluno = service.cadastrar(dados);
         var uri = uriComponentsBuilder.path("/alunos/{id}").buildAndExpand(aluno.getId()).toUri();
-        return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoAluno(aluno));
+        return ResponseEntity.created(uri).body(new DadosDetalhamentoAluno(aluno));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
@@ -97,7 +95,6 @@ public class AlunoController {
     @ApiResponse(responseCode = "400", description = "Dados inválidos")
     @ApiResponse(responseCode = "404", description = "Aluno não encontrado")
     @PutMapping("/{id}")
-    @Transactional
     public ResponseEntity<DadosDetalhamentoAluno> atualizar(@PathVariable Long id,
                                                             @RequestBody @Valid  DadosAtualizacaoAlunos dados){
         Aluno aluno = service.atualizar(id, dados);
@@ -117,7 +114,6 @@ public class AlunoController {
     @ApiResponse(responseCode = "204", description = "Aluno excluído com sucesso")
     @ApiResponse(responseCode = "404", description = "Aluno não encontrado")
     @DeleteMapping("/{id}")
-    @Transactional
     public ResponseEntity<Void> excluir(@PathVariable Long id){
         service.excluir(id);
         return ResponseEntity.noContent().build();

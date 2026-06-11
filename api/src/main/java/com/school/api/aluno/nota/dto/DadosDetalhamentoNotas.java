@@ -1,7 +1,6 @@
 package com.school.api.aluno.nota.dto;
 
 import com.school.api.aluno.nota.Nota;
-import com.school.api.professores.dto.DadosDetalhamentoProfessor;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Dados da nota registrada")

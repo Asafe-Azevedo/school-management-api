@@ -1,7 +1,7 @@
 package com.school.api.aluno.nota;
 
 import com.school.api.aluno.Aluno;
-import com.school.api.aluno.AlunoRespository;
+import com.school.api.aluno.AlunoRepository;
 import com.school.api.aluno.disciplina.Disciplina;
 import com.school.api.aluno.disciplina.DisciplinaRepository;
 
@@ -27,7 +27,7 @@ class NotaServiceTest {
     private NotaRepository notaRepository;
 
     @Mock
-    private AlunoRespository alunoRespository;
+    private AlunoRepository alunoRepository;
 
     @Mock
     private DisciplinaRepository disciplinaRepository;
@@ -52,7 +52,7 @@ class NotaServiceTest {
 
         when(aluno.getTurma()).thenReturn(turma);
         when(turma.getDisciplinas()).thenReturn(disciplinas);
-        when(alunoRespository.findById(1L)).thenReturn(Optional.of(aluno));
+        when(alunoRepository.findById(1L)).thenReturn(Optional.of(aluno));
         when(disciplinaRepository.findById(1L)).thenReturn(Optional.of(disciplina));
         when(notaRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -81,7 +81,7 @@ class NotaServiceTest {
 
         when(aluno.getTurma()).thenReturn(turma);
         when(turma.getDisciplinas()).thenReturn(List.of(disciplina));
-        when(alunoRespository.findById(1L)).thenReturn(Optional.of(aluno));
+        when(alunoRepository.findById(1L)).thenReturn(Optional.of(aluno));
         when(disciplinaRepository.findById(1L)).thenReturn(Optional.of(disciplina));
 
         RegraNegocioException exception = assertThrows(

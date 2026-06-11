@@ -1,6 +1,5 @@
 package com.school.api.professores;
 
-import com.school.api.infra.erros.NotFoundException;
 import com.school.api.infra.erros.professores.ProfessorNaoEncontradoException;
 import com.school.api.util.FormatadorUtils;
 import com.school.api.endereco.dto.DadosEndereco;
@@ -12,6 +11,7 @@ import com.school.api.professores.dto.DadosListagemProfessores;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProfessorService {
@@ -24,6 +24,7 @@ public class ProfessorService {
          this.enderecoService = enderecoService;
      }
 
+     @Transactional
      public Professor cadastrar(DadosCadastroProfessores dadosCadastroProfessores){
 
          DadosEndereco enderecoPreenchido = enderecoService.preencherEndereco(dadosCadastroProfessores.endereco());
@@ -47,6 +48,7 @@ public class ProfessorService {
          return repository.findAllByAtivoTrue(pageable).map(DadosListagemProfessores::new);
      }
 
+     @Transactional
      public Professor atualizar(Long id, DadosAtualizacaoProfessores dadosAtualizacaoProfessores){
         Professor professor = repository.findById(id).orElseThrow(ProfessorNaoEncontradoException::new);
 
@@ -63,6 +65,8 @@ public class ProfessorService {
         }
         return professor;
      }
+
+     @Transactional
      public void excluir(Long id){
          Professor professor = repository.findById(id).orElseThrow(ProfessorNaoEncontradoException::new);
          professor.excluir();

@@ -1,15 +1,15 @@
 package com.school.api.aluno.nota;
 
 import com.school.api.aluno.Aluno;
-import com.school.api.aluno.AlunoRespository;
+import com.school.api.aluno.AlunoRepository;
 import com.school.api.aluno.disciplina.Disciplina;
 import com.school.api.aluno.disciplina.DisciplinaRepository;
-import com.school.api.aluno.nota.dto.DadosBoletim;
 import com.school.api.aluno.nota.dto.DadosBoletimDetalhado;
 import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.infra.erros.alunos.AlunoNaoEncontradoException;
 import com.school.api.infra.erros.disciplina.DisciplinaNaoEncontradaException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,26 +20,27 @@ import java.util.stream.Collectors;
 public class NotaService {
 
     private final NotaRepository notaRepository;
-    private final AlunoRespository alunoRespository;
+    private final AlunoRepository alunoRepository;
     private final DisciplinaRepository disciplinaRepository;
 
     public NotaService(NotaRepository notaRepository,
-                       AlunoRespository alunoRespository,
+                       AlunoRepository alunoRepository,
                        DisciplinaRepository disciplinaRepository){
         this.notaRepository = notaRepository;
-        this.alunoRespository = alunoRespository;
+        this.alunoRepository = alunoRepository;
         this.disciplinaRepository = disciplinaRepository;
     }
 
+    @Transactional
     public Nota lancarNota(Long alunoId, Long disciplinaId, Double valor, TipoNota tipo, Integer bimestre){
-        Aluno aluno = alunoRespository.findById(alunoId)
+        Aluno aluno = alunoRepository.findById(alunoId)
                 .orElseThrow(AlunoNaoEncontradoException::new);
 
         Disciplina disciplina = disciplinaRepository.findById(disciplinaId)
                 .orElseThrow(DisciplinaNaoEncontradaException::new);
 
         if(!aluno.getTurma().getDisciplinas().contains(disciplina)){
-            throw new IllegalArgumentException("Aluno não está matriculado nessa disciplina");
+            throw new RegraNegocioException("Aluno não está matriculado nessa disciplina");
         }
 
         if(valor < 0 || valor > 10){
@@ -47,7 +48,7 @@ public class NotaService {
         }
 
         if(bimestre < 1 || bimestre > 4){
-            throw new IllegalArgumentException("Bimestre deve ser entre 1 e 4");
+            throw new RegraNegocioException("Bimestre deve ser entre 1 e 4");
         }
 
         Nota nota = new Nota(null, valor, tipo, bimestre, aluno, disciplina);

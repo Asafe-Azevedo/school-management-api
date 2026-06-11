@@ -5,8 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "Dados para atualização de professor")
-public record DadosAtualizacaoProfessores( @NotNull
-                                           Long id,
+public record DadosAtualizacaoProfessores(
 
                                            @Schema(
                                                    description = "Novo telefone do professor",

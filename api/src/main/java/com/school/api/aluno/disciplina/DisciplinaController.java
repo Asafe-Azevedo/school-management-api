@@ -6,6 +6,7 @@ import com.school.api.aluno.disciplina.dto.DadosDetalhamentoDisciplina;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,7 +44,7 @@ public class DisciplinaController {
     @ApiResponse(responseCode = "404", description = "Professor não encontrado")
     @ApiResponse(responseCode = "400", description = "Dados inválidos")
     @PostMapping
-    public ResponseEntity<DadosDetalhamentoDisciplina> cadastrar(@RequestBody DadosCadastroDisciplina dados) {
+    public ResponseEntity<DadosDetalhamentoDisciplina> cadastrar(@RequestBody @Valid DadosCadastroDisciplina dados) {
         Disciplina disciplina = service.cadastrar(dados);
         return ResponseEntity.status(HttpStatus.CREATED).body(new DadosDetalhamentoDisciplina(disciplina));
     }

@@ -6,6 +6,7 @@ import com.school.api.aluno.nota.dto.DadosDetalhamentoNotas;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class NotaController {
     @ApiResponse(responseCode = "404", description = "Aluno ou disciplina não encontrados")
     @PostMapping
     public ResponseEntity<DadosDetalhamentoNotas> lancarNota(
-            @RequestBody DadosCadastroNotas dados
+            @RequestBody @Valid DadosCadastroNotas dados
             ){
         Nota nota = service.lancarNota(dados.alunoId(), dados.disciplinaId(), dados.valor(), dados.tipo(), dados.bimestre());
         return ResponseEntity.ok(new DadosDetalhamentoNotas(nota));

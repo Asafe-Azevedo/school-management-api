@@ -1,5 +1,7 @@
 package com.school.api.util;
 
+import com.school.api.infra.erros.RegraNegocioException;
+
 public class FormatadorUtils {
 
     public static String formatarCpf(String cpf){
@@ -7,7 +9,7 @@ public class FormatadorUtils {
         cpf = cpf.replaceAll("\\D", "");
 
         if (cpf.length() != 11){
-            throw new IllegalArgumentException("CPF inválido");
+            throw new RegraNegocioException("CPF inválido");
         }
 
         return cpf.substring(0, 3) + "." +
@@ -30,6 +32,6 @@ public class FormatadorUtils {
                     telefone.substring(2, 6) + "-" +
                     telefone.substring(6);
         }
-        throw new IllegalArgumentException("Telefone inválido");
+        throw new RegraNegocioException("Telefone inválido");
     }
 }
