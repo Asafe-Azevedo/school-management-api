@@ -1,5 +1,6 @@
 package com.school.api.professores;
 
+import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.infra.erros.professores.ProfessorNaoEncontradoException;
 import com.school.api.util.FormatadorUtils;
 import com.school.api.endereco.dto.DadosEndereco;
@@ -31,6 +32,10 @@ public class ProfessorService {
 
          String telefoneFormatado = FormatadorUtils.formatarTelefone(dadosCadastroProfessores.telefone());
          String cpfFormatado = FormatadorUtils.formatarCpf(dadosCadastroProfessores.cpf());
+
+         if(repository.existsByCpf(cpfFormatado)){
+             throw new RegraNegocioException("Já existe um professor cadastrado com este CPF.");
+         }
 
          Professor professor = new Professor(
                  dadosCadastroProfessores.nome(),

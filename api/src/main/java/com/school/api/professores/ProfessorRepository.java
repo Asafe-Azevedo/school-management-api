@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ProfessorRepository extends JpaRepository<Professor, Long> {
     Page<Professor> findAllByAtivoTrue(Pageable pageable);
 
+    boolean existsByCpf(String cpf);
 }

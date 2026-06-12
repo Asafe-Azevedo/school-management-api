@@ -1,7 +1,6 @@
 package com.school.api.professores;
 
 import com.school.api.endereco.Endereco;
-import com.school.api.professores.Especialidade;
 import jakarta.persistence.*;
 import lombok.*;
 
