@@ -34,8 +34,19 @@ public class Disciplina {
     @ManyToMany(mappedBy = "disciplinas")
     private List<Turma> turmas = new ArrayList<>();
 
+    private Boolean ativo;
+
     public Disciplina(String nome, Professor professor){
         this.nome = nome;
         this.professor = professor;
+        this.ativo = true;
+    }
+
+    public void atualizarProfessor(Professor professor){
+        this.professor = professor;
+    }
+
+    public void excluir(){
+        this.ativo = false;
     }
 }
