@@ -1,9 +1,12 @@
-package com.school.api.professores;
+package com.school.api.service.professores;
 
 import com.school.api.endereco.EnderecoService;
 import com.school.api.endereco.dto.DadosEndereco;
 import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.infra.erros.professores.ProfessorNaoEncontradoException;
+import com.school.api.professores.Professor;
+import com.school.api.professores.ProfessorRepository;
+import com.school.api.professores.ProfessorService;
 import com.school.api.professores.dto.DadosAtualizacaoProfessores;
 import com.school.api.professores.dto.DadosCadastroProfessores;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,10 +1,14 @@
-package com.school.api.turma;
+package com.school.api.service.turma;
 
 import com.school.api.aluno.disciplina.Disciplina;
 import com.school.api.aluno.disciplina.DisciplinaRepository;
 import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.infra.erros.disciplina.DisciplinaNaoEncontradaException;
 import com.school.api.infra.erros.turmas.TurmaNaoEncontradaException;
+import com.school.api.turma.Serie;
+import com.school.api.turma.Turma;
+import com.school.api.turma.TurmaRepository;
+import com.school.api.turma.TurmaService;
 import com.school.api.turma.dto.DadosTurmaDetalhada;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,8 @@
-package com.school.api.aluno;
+package com.school.api.service.aluno;
 
+import com.school.api.aluno.Aluno;
+import com.school.api.aluno.AlunoRepository;
+import com.school.api.aluno.AlunoService;
 import com.school.api.aluno.dto.DadosAtualizacaoAlunos;
 import com.school.api.aluno.dto.DadosCadastroAlunos;
 import com.school.api.aluno.dto.DadosDetalhamentoAluno;

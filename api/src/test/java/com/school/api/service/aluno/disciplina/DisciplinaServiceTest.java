@@ -1,5 +1,8 @@
-package com.school.api.aluno.disciplina;
+package com.school.api.service.aluno.disciplina;
 
+import com.school.api.aluno.disciplina.Disciplina;
+import com.school.api.aluno.disciplina.DisciplinaRepository;
+import com.school.api.aluno.disciplina.DisciplinaService;
 import com.school.api.aluno.disciplina.dto.DadosAtualizacaoDisciplina;
 import com.school.api.aluno.disciplina.dto.DadosCadastroDisciplina;
 import com.school.api.aluno.disciplina.dto.DadosDetalhamentoDisciplina;

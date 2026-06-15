@@ -1,10 +1,14 @@
-package com.school.api.aluno.nota;
+package com.school.api.service.aluno.nota;
 
 import com.school.api.aluno.Aluno;
 import com.school.api.aluno.AlunoRepository;
 import com.school.api.aluno.disciplina.Disciplina;
 import com.school.api.aluno.disciplina.DisciplinaRepository;
 
+import com.school.api.aluno.nota.Nota;
+import com.school.api.aluno.nota.NotaRepository;
+import com.school.api.aluno.nota.NotaService;
+import com.school.api.aluno.nota.TipoNota;
 import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.turma.Turma;
 import org.junit.jupiter.api.BeforeEach;
