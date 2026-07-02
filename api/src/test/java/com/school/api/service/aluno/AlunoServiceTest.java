@@ -11,16 +11,15 @@ import com.school.api.endereco.EnderecoService;
 import com.school.api.endereco.dto.DadosEndereco;
 import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.infra.erros.alunos.AlunoNaoEncontradoException;
-import com.school.api.professores.dto.DadosAtualizacaoProfessores;
 import com.school.api.turma.Serie;
 import com.school.api.turma.Turma;
 import com.school.api.turma.TurmaRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -81,6 +80,7 @@ public class AlunoServiceTest {
     }
 
     @Test
+    @DisplayName("Deve cadastrar com sucesso")
     void deveCadastrarAlunoComSucesso(){
         Turma turma = mock(Turma.class);
 
@@ -97,6 +97,7 @@ public class AlunoServiceTest {
     }
 
     @Test
+    @DisplayName("Não deve cadastrar aluno com CPF duplicado")
     void naoDeveCadastrarAlunoComCpfDuplicado(){
         when(alunoRepository.existsByCpf(anyString())).thenReturn(true);
 
@@ -106,6 +107,7 @@ public class AlunoServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção quando não existir turma disponível")
     void deveLancarExcecaoQuandoNaoExistirTurmaDisponivel(){
         when(alunoRepository.existsByCpf(anyString())).thenReturn(false);
         when(enderecoService.preencherEndereco(any())).thenReturn(endereco);
@@ -117,6 +119,7 @@ public class AlunoServiceTest {
     }
 
     @Test
+    @DisplayName("Deve atualizar com sucesso")
     void deveAtualizarComSucesso(){
         Long id = 1L;
 
@@ -138,6 +141,7 @@ public class AlunoServiceTest {
     }
 
     @Test
+    @DisplayName("Deve atualizar endereço do aluno")
     void deveAtualizarEnderecoDoAluno(){
         Long id = 1L;
 
@@ -156,6 +160,7 @@ public class AlunoServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção ao atualizar aluno inexistente")
     void deveLancarExcecaoAoAtualizarAlunoInexistente(){
         Long id = 1L;
 
@@ -172,6 +177,7 @@ public class AlunoServiceTest {
     }
 
     @Test
+    @DisplayName("Deve excluir alunos com sucesso")
     void deveExcluirAlunosComSucesso(){
         Long id = 1L;
 
@@ -183,7 +189,8 @@ public class AlunoServiceTest {
     }
 
     @Test
-    void deveLancarExcecaoAoExcluirALunoInexistente(){
+    @DisplayName("Deve lançar exceção ao excluir aluno inexistente")
+    void deveLancarExcecaoAoExcluirAlunoInexistente(){
         Long id = 1L;
 
         when(alunoRepository.findById(id)).thenReturn(Optional.empty());
@@ -192,6 +199,7 @@ public class AlunoServiceTest {
     }
 
     @Test
+    @DisplayName("Deve detalhar aluno com sucesso")
     void deveDetalharAlunoComSucesso(){
         Long id = 1L;
 

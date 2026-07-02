@@ -1,16 +1,13 @@
 package com.school.api.aluno;
 
-import com.school.api.aluno.dto.DadosAtualizacaoAlunos;
 import com.school.api.aluno.dto.DadosCadastroAlunos;
 import com.school.api.endereco.Endereco;
+import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.turma.Serie;
 import com.school.api.turma.Turma;
 import com.school.api.util.FormatadorUtils;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -59,13 +56,34 @@ public class Aluno {
         this.endereco = endereco;
     }
 
+    public Aluno(
+            String nome,
+            String email,
+            String cpf,
+            Endereco endereco,
+            LocalDate dataNascimento,
+            String nomeResponsavel,
+            String telefoneResponsavel,
+            Serie serie
+    ) {
+        this.nome = nome;
+        this.email = email;
+        this.cpf = cpf;
+        this.endereco = endereco;
+        this.dataNascimento = dataNascimento;
+        this.nomeResponsavel = nomeResponsavel;
+        this.telefoneResponsavel = telefoneResponsavel;
+        this.serie = serie;
+        this.ativo = true;
+    }
+
     public void excluir(){
         this.ativo = false;
     }
 
-    public void definirTurma(Turma turma){
+    public void matricularNaTurma(Turma turma){
         if(turma == null){
-            throw new IllegalArgumentException("Turma não pode ser nula");
+            throw new RegraNegocioException("Turma não pode ser nula");
         }
         this.turma = turma;
     }

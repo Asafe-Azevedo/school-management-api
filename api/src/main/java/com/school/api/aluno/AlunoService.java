@@ -62,7 +62,7 @@ public class AlunoService {
         Aluno aluno = new Aluno(dadosCadastroAlunoss,
                 new Endereco(enderecoPreenchido), cpfFormatado
         );
-        aluno.definirTurma(turma);
+        aluno.matricularNaTurma(turma);
         return repository.save(aluno);
     }
 
