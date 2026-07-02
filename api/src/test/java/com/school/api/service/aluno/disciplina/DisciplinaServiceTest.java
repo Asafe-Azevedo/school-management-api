@@ -11,6 +11,7 @@ import com.school.api.infra.erros.professores.ProfessorNaoEncontradoException;
 import com.school.api.professores.Professor;
 import com.school.api.professores.ProfessorRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,6 +54,7 @@ class DisciplinaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve cadastar disciplina com sucesso")
     void deveCadastrarDisciplinaComSucesso(){
         when(professorRepository.findById(1L)).thenReturn(Optional.of(professor));
         when(disciplinaRepository.save(any(Disciplina.class))).thenReturn(disciplina);
@@ -66,6 +68,7 @@ class DisciplinaServiceTest {
     }
 
     @Test
+    @DisplayName("Não deve cadastar disciplina quando professor não existir")
     void naoDeveCadastrarDisciplinaQuandoProfessorNaoExistir(){
         when(professorRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -75,6 +78,7 @@ class DisciplinaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve associar professor corretamente na disciplina")
     void deveAssociarProfessorCorretamenteNaDisciplina(){
         when(professorRepository.findById(1L)).thenReturn(Optional.of(professor));
 
@@ -84,6 +88,7 @@ class DisciplinaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve detalhar discplina")
     void deveDetalharDisciplina(){
         when(professor.getNome()).thenReturn("João Silva");
         when(disciplina.getId()).thenReturn(1L);
@@ -93,16 +98,19 @@ class DisciplinaServiceTest {
 
         DadosDetalhamentoDisciplina resultado = disciplinaService.detalhar(1L);
 
-        assertNotNull(resultado);
-        assertEquals(1L, resultado.id());
-        assertEquals("Matemática", resultado.nome());
-        assertEquals("João Silva", resultado.professor());
+        assertAll(
+                () -> assertNotNull(resultado),
+                () -> assertEquals(1L, resultado.id()),
+                () -> assertEquals("Matemática", resultado.nome()),
+                () -> assertEquals("João Silva", resultado.professor())
+        );
 
         verify(disciplinaRepository).findById(1L);
 
     }
 
     @Test
+    @DisplayName("Deve lançar exeção ao detalhar disciplina inexistente")
     void deveLancarExcecaoAoDetalharDisciplinaInexistente(){
         when(disciplinaRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -110,6 +118,7 @@ class DisciplinaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve atualizar professor responsável")
     void deveAtualizarProfessorResponsavel(){
         Professor novoProfessor = mock(Professor.class);
 
@@ -122,6 +131,7 @@ class DisciplinaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção ao atualizar disciplina inexistente")
     void deveLancarExcecaoAoAtualizarDisciplinaInexistente(){
         when(disciplinaRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -131,6 +141,7 @@ class DisciplinaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção ao atualizar com professor inexistente")
     void deveLancarExcecaoAoAtualizarComProfessorInexistente(){
         when(disciplinaRepository.findById(1L)).thenReturn(Optional.of(disciplina));
         when(professorRepository.findById(2L)).thenReturn(Optional.empty());
@@ -141,6 +152,7 @@ class DisciplinaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve excluoir disciplina")
     void deveExcluirDisciplina(){
         when(disciplinaRepository.findById(1L)).thenReturn(Optional.of(disciplina));
 
@@ -150,6 +162,7 @@ class DisciplinaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção ao excluir disciplina inexistente")
     void deveLancarExcecaoAoExcluirDisciplinaInexistente(){
         when(disciplinaRepository.findById(1L)).thenReturn(Optional.empty());
 

@@ -11,6 +11,8 @@ import com.school.api.turma.TurmaRepository;
 import com.school.api.turma.TurmaService;
 import com.school.api.turma.dto.DadosTurmaDetalhada;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,6 +48,7 @@ class TurmaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve adicionar disciplina na turma")
     void deveAdicionarDisciplinaNaTurma(){
         Long turmaId = 1L;
         Long disciplinaId = 1L;
@@ -64,6 +67,7 @@ class TurmaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção quando turma não existir")
     void deveLancarExcecaoQuandoTurmaNaoExistir(){
         Long turmaId = 1L;
         Long disciplinaId = 1L;
@@ -77,6 +81,7 @@ class TurmaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção quando disciplina não existir")
     void deveLancarExcecaoQuandoDisciplinaNaoExistir(){
         Long turmaId = 1L;
         Long disciplinaId = 1L;
@@ -90,6 +95,7 @@ class TurmaServiceTest {
     }
 
     @Test
+    @DisplayName("Não deve adicionar disciplina duplicada")
     void naoDeveAdicionarDisciplinaDuplicada(){
         Long turmaId = 1L;
         Long disciplinaId = 1L;
@@ -107,6 +113,7 @@ class TurmaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve listar disciplinas da turma")
     void deveListarDisciplinasDaTurma(){
         Long turmaId = 1L;
 
@@ -120,13 +127,15 @@ class TurmaServiceTest {
 
         List<String> resultado = turmaService.listarDisciplinas(turmaId);
 
-        assertEquals(2, resultado.size());
-
-        assertTrue(resultado.contains("Matemática"));
-        assertTrue(resultado.contains("Física"));
+        assertAll(
+                () -> assertEquals(2, resultado.size()),
+                () -> assertTrue(resultado.contains("Matemática")),
+                () -> assertTrue(resultado.contains("Física"))
+        );
     }
 
     @Test
+    @DisplayName("Deve lançar exceção ao listar turma inexistente")
     void deveLancarExcecaoAoListarTurmaInexistente(){
         Long turmaId = 1L;
 
@@ -136,6 +145,7 @@ class TurmaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve detalhar turma")
     void deveDetalharTurma(){
         Long turmaId = 1L;
 
@@ -150,14 +160,17 @@ class TurmaServiceTest {
 
         DadosTurmaDetalhada resultado = turmaService.detalhar(turmaId);
 
-        assertNotNull(resultado);
-        assertEquals(turmaId, resultado.id());
-        assertEquals("Turma A", resultado.nome());
-        assertEquals(Serie.PRIMEIRO_EM, resultado.serie());
-        assertEquals(List.of("Matemática"), resultado.disciplinas());
+        assertAll(
+                () -> assertNotNull(resultado),
+                () -> assertEquals(turmaId, resultado.id()),
+                () -> assertEquals("Turma A", resultado.nome()),
+                () -> assertEquals(Serie.PRIMEIRO_EM, resultado.serie()),
+                () ->assertEquals(List.of("Matemática"), resultado.disciplinas())
+        );
     }
 
     @Test
+    @DisplayName("Deve lançar exceção ao detalhar turma inexistente")
     void deveLancarExcecaoAoDetalharTurmaInexistente(){
         Long turmaId = 1L;
 

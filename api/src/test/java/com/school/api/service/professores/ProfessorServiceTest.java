@@ -10,6 +10,7 @@ import com.school.api.professores.ProfessorService;
 import com.school.api.professores.dto.DadosAtualizacaoProfessores;
 import com.school.api.professores.dto.DadosCadastroProfessores;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -65,6 +66,7 @@ class ProfessorServiceTest {
     }
 
     @Test
+    @DisplayName("Deve cadastrar professor com sucesso")
     void deveCadastrarProfessorComSucesso(){
         when(enderecoService.preencherEndereco(any())).thenReturn(endereco);
         when(professorRepository.existsByCpf(anyString())).thenReturn(false);
@@ -75,6 +77,7 @@ class ProfessorServiceTest {
     }
 
     @Test
+    @DisplayName("Não deve cadastrar professor com CPF duplicado")
     void naoDeveCadastrarProfessorComCpfDuplicado(){
         when(enderecoService.preencherEndereco(any())).thenReturn(endereco);
         when(professorRepository.existsByCpf((anyString()))).thenReturn(true);
@@ -85,6 +88,7 @@ class ProfessorServiceTest {
     }
 
     @Test
+    @DisplayName("Deve atualizar professor com sucesso")
     void deveAtualizarProfessorComSucesso(){
         Long id = 1L;
 
@@ -103,6 +107,7 @@ class ProfessorServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção ao atualizar professor inexistente")
     void deveLancarExcecaoAoAtualizarProfessorInexistente(){
 
         Long id = 1L;
@@ -119,6 +124,7 @@ class ProfessorServiceTest {
     }
 
     @Test
+    @DisplayName("Deve excluir professor com sucesso")
     void deveExcluirProfessorComSucesso(){
 
         Long id = 1L;
@@ -130,6 +136,7 @@ class ProfessorServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção ao excluir professor inexistente")
     void deveLancarExcecaoAoExcluirProfessorInexistente(){
         Long id = 1L;
 

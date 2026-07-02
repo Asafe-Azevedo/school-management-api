@@ -12,6 +12,7 @@ import com.school.api.aluno.nota.TipoNota;
 import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.turma.Turma;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -45,6 +46,7 @@ class NotaServiceTest {
     }
 
     @Test
+    @DisplayName("Deveria lançar nota com sucesso")
     void deveriaLancarNotaComSucesso(){
 
         Aluno aluno = mock(Aluno.class);
@@ -68,15 +70,18 @@ class NotaServiceTest {
                 1
         );
 
-        assertNotNull(nota);
-        assertEquals(8.0, nota.getValor());
-        assertEquals(TipoNota.PROVA, nota.getTipo());
-        assertEquals(1, nota.getBimestre());
+        assertAll(
+                () -> assertNotNull(nota),
+                () -> assertEquals(8.0, nota.getValor()),
+                () -> assertEquals(TipoNota.PROVA, nota.getTipo()),
+                () -> assertEquals(1, nota.getBimestre())
+        );
 
         verify(notaRepository).save(any(Nota.class));
     }
 
     @Test
+    @DisplayName("Deveria lançar exceção quando nota maior que dez")
     void deveriaLancarExcecaoQuandoNotaMaiorQueDez(){
 
         Aluno aluno = mock(Aluno.class);

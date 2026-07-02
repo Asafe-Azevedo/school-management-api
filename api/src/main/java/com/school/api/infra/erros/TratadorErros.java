@@ -1,6 +1,5 @@
 package com.school.api.infra.erros;
 
-import org.apache.coyote.ajp.AbstractAjpProtocol;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
