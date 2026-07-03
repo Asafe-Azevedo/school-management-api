@@ -1,26 +1,22 @@
-package com.school.api.integration;
+package com.school.api.integration.aluno.nota;
 
 import com.school.api.aluno.AlunoRepository;
 import com.school.api.aluno.disciplina.DisciplinaRepository;
 import com.school.api.aluno.nota.NotaRepository;
-import com.school.api.professores.Professor;
 import com.school.api.professores.ProfessorRepository;
-import com.school.api.support.factory.AlunoFactory;
-import com.school.api.support.factory.DisciplinaFactory;
-import com.school.api.support.factory.NotaFactory;
-import com.school.api.support.factory.ProfessorFactory;
+import com.school.api.support.factory.aluno.AlunoFactory;
+import com.school.api.support.factory.aluno.disciplina.DisciplinaFactory;
+import com.school.api.support.factory.aluno.nota.NotaFactory;
+import com.school.api.support.factory.professor.ProfessorFactory;
+import com.school.api.support.integration.BaseRepositoryIT;
 import com.school.api.support.util.TestConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
-@ActiveProfiles("test")
-class NotaRepositoryIT {
+class NotaRepositoryIT extends BaseRepositoryIT {
 
     @Autowired
     private NotaRepository notaRepository;

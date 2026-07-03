@@ -1,20 +1,17 @@
-package com.school.api.integration;
+package com.school.api.integration.professor;
 
-import com.school.api.support.factory.ProfessorFactory;
+import com.school.api.support.factory.professor.ProfessorFactory;
 import com.school.api.professores.ProfessorRepository;
+import com.school.api.support.integration.BaseRepositoryIT;
 import com.school.api.support.util.TestConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
-@ActiveProfiles("test")
-class ProfessorRepositoryIT {
+class ProfessorRepositoryIT extends BaseRepositoryIT {
 
     @Autowired
     private ProfessorRepository professorRepository;

@@ -1,20 +1,17 @@
-package com.school.api.integration;
+package com.school.api.integration.aluno;
 
 import com.school.api.aluno.AlunoRepository;
-import com.school.api.support.factory.AlunoFactory;
+import com.school.api.support.factory.aluno.AlunoFactory;
+import com.school.api.support.integration.BaseRepositoryIT;
 import com.school.api.support.util.TestConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
-@ActiveProfiles("test")
-class AlunoRepositoryIT {
+class AlunoRepositoryIT extends BaseRepositoryIT {
 
     @Autowired
     private AlunoRepository alunoRepository;
