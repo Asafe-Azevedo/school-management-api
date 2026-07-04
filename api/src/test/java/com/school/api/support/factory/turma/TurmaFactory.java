@@ -1,4 +1,4 @@
-package com.school.api.support.factory;
+package com.school.api.support.factory.turma;
 
 import com.school.api.aluno.disciplina.Disciplina;
 import com.school.api.support.util.TestConstants;

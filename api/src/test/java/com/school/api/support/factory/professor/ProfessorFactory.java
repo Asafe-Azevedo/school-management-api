@@ -1,8 +1,9 @@
-package com.school.api.support.factory;
+package com.school.api.support.factory.professor;
 
 import com.school.api.endereco.Endereco;
 import com.school.api.professores.Especialidade;
 import com.school.api.professores.Professor;
+import com.school.api.support.factory.EnderecoFactory;
 import com.school.api.support.util.TestConstants;
 import com.school.api.support.util.TestDataGenerator;
 
@@ -23,20 +24,10 @@ public final class ProfessorFactory {
                 TestDataGenerator.telefone(indice),
                 TestDataGenerator.cpf(indice),
                 TestConstants.ESPECIALIDADE_PADRAO,
-                criarEndereco()
+                EnderecoFactory.criarEndereco()
         );
     }
-    private static Endereco criarEndereco(){
-        return new Endereco(
-                TestConstants.CEP,
-                TestConstants.RUA,
-                TestConstants.NUMERO,
-                TestConstants.BAIRRO,
-                TestConstants.CIDADE,
-                TestConstants.UF,
-                null
-        );
-    }
+
     public static Professor criarProfessorInativo(){
         Professor professor = criarProfessor();
         professor.excluir();

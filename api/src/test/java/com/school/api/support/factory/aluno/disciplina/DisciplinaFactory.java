@@ -1,4 +1,4 @@
-package com.school.api.support.factory;
+package com.school.api.support.factory.aluno.disciplina;
 
 import com.school.api.aluno.disciplina.Disciplina;
 import com.school.api.professores.Professor;
