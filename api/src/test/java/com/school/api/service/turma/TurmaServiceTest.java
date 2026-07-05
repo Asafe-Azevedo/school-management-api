@@ -10,10 +10,7 @@ import com.school.api.turma.Turma;
 import com.school.api.turma.TurmaRepository;
 import com.school.api.turma.TurmaService;
 import com.school.api.turma.dto.DadosTurmaDetalhada;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -47,135 +44,150 @@ class TurmaServiceTest {
         disciplina = mock(Disciplina.class);
     }
 
-    @Test
-    @DisplayName("Deve adicionar disciplina na turma")
-    void deveAdicionarDisciplinaNaTurma(){
-        Long turmaId = 1L;
-        Long disciplinaId = 1L;
+    @Nested
+    @DisplayName("adicionarDisciplina")
+    class AdicionarDisciplina{
 
-        List<Disciplina> disciplinas = new ArrayList<>();
+        @Test
+        @DisplayName("Deve adicionar disciplina na turma")
+        void deveAdicionarDisciplinaNaTurma(){
+            Long turmaId = 1L;
+            Long disciplinaId = 1L;
 
-        when(turmaRepository.findById(turmaId)).thenReturn(Optional.of(turma));
-        when(disciplinaRepository.findById(disciplinaId)).thenReturn(Optional.of(disciplina));
-        when(turma.getDisciplinas()).thenReturn(disciplinas);
+            List<Disciplina> disciplinas = new ArrayList<>();
 
-        turmaService.adicionarDisciplina(turmaId, disciplinaId);
+            when(turmaRepository.findById(turmaId)).thenReturn(Optional.of(turma));
+            when(disciplinaRepository.findById(disciplinaId)).thenReturn(Optional.of(disciplina));
+            when(turma.getDisciplinas()).thenReturn(disciplinas);
 
-        verify(turmaRepository).save(turma);
+            turmaService.adicionarDisciplina(turmaId, disciplinaId);
 
-        assertTrue(disciplinas.contains(disciplina));
+            verify(turmaRepository).save(turma);
+
+            assertTrue(disciplinas.contains(disciplina));
+        }
+
+        @Test
+        @DisplayName("Deve lançar exceção quando turma não existir")
+        void deveLancarExcecaoQuandoTurmaNaoExistir(){
+            Long turmaId = 1L;
+            Long disciplinaId = 1L;
+
+            when(turmaRepository.findById(turmaId)).thenReturn(Optional.empty());
+
+            assertThrows(TurmaNaoEncontradaException.class, () -> turmaService.adicionarDisciplina(turmaId, disciplinaId));
+
+            verify(disciplinaRepository, never()).findById(anyLong());
+            verify(turmaRepository, never()).save(any(Turma.class));
+        }
+
+        @Test
+        @DisplayName("Deve lançar exceção quando disciplina não existir")
+        void deveLancarExcecaoQuandoDisciplinaNaoExistir(){
+            Long turmaId = 1L;
+            Long disciplinaId = 1L;
+
+            when(turmaRepository.findById(turmaId)).thenReturn(Optional.of(turma));
+            when(disciplinaRepository.findById(disciplinaId)).thenReturn(Optional.empty());
+
+            assertThrows(DisciplinaNaoEncontradaException.class, () -> turmaService.adicionarDisciplina(turmaId, disciplinaId));
+
+            verify(turmaRepository, never()).save(any(Turma.class));
+        }
+
+        @Test
+        @DisplayName("Não deve adicionar disciplina duplicada")
+        void naoDeveAdicionarDisciplinaDuplicada(){
+            Long turmaId = 1L;
+            Long disciplinaId = 1L;
+
+            List<Disciplina> disciplinas = new ArrayList<>();
+            disciplinas.add(disciplina);
+
+            when(turmaRepository.findById(turmaId)).thenReturn(Optional.of(turma));
+            when(disciplinaRepository.findById(disciplinaId)).thenReturn(Optional.of(disciplina));
+            when(turma.getDisciplinas()).thenReturn(disciplinas);
+
+            assertThrows(RegraNegocioException.class, () -> turmaService.adicionarDisciplina(turmaId, disciplinaId));
+
+            verify(turmaRepository, never()).save(any(Turma.class));
+        }
     }
 
-    @Test
-    @DisplayName("Deve lançar exceção quando turma não existir")
-    void deveLancarExcecaoQuandoTurmaNaoExistir(){
-        Long turmaId = 1L;
-        Long disciplinaId = 1L;
+    @Nested
+    @DisplayName("Listar")
+    class Listar{
 
-        when(turmaRepository.findById(turmaId)).thenReturn(Optional.empty());
+        @Test
+        @DisplayName("Deve listar disciplinas da turma")
+        void deveListarDisciplinasDaTurma(){
+            Long turmaId = 1L;
 
-        assertThrows(TurmaNaoEncontradaException.class, () -> turmaService.adicionarDisciplina(turmaId, disciplinaId));
+            Disciplina disciplina1 = mock(Disciplina.class);
+            Disciplina disciplina2 = mock(Disciplina.class);
 
-        verify(disciplinaRepository, never()).findById(anyLong());
-        verify(turmaRepository, never()).save(any());
+            when(turmaRepository.findById(turmaId)).thenReturn(Optional.of(turma));
+            when(turma.getDisciplinas()).thenReturn(List.of(disciplina1, disciplina2));
+            when(disciplina1.getNome()).thenReturn("Matemática");
+            when(disciplina2.getNome()).thenReturn("Física");
+
+            List<String> resultado = turmaService.listarDisciplinas(turmaId);
+
+            assertAll(
+                    () -> assertEquals(2, resultado.size()),
+                    () -> assertTrue(resultado.contains("Matemática")),
+                    () -> assertTrue(resultado.contains("Física"))
+            );
+        }
+
+        @Test
+        @DisplayName("Deve lançar exceção ao listar turma inexistente")
+        void deveLancarExcecaoAoListarTurmaInexistente(){
+            Long turmaId = 1L;
+
+            when(turmaRepository.findById(turmaId)).thenReturn(Optional.empty());
+
+            assertThrows(TurmaNaoEncontradaException.class, () -> turmaService.listarDisciplinas(turmaId));
+        }
     }
 
-    @Test
-    @DisplayName("Deve lançar exceção quando disciplina não existir")
-    void deveLancarExcecaoQuandoDisciplinaNaoExistir(){
-        Long turmaId = 1L;
-        Long disciplinaId = 1L;
+    @Nested
+    @DisplayName("Detalhar")
+    class Detalhar{
 
-        when(turmaRepository.findById(turmaId)).thenReturn(Optional.of(turma));
-        when(disciplinaRepository.findById(disciplinaId)).thenReturn(Optional.empty());
+        @Test
+        @DisplayName("Deve detalhar turma")
+        void deveDetalharTurma(){
+            Long turmaId = 1L;
 
-        assertThrows(DisciplinaNaoEncontradaException.class, () -> turmaService.adicionarDisciplina(turmaId, disciplinaId));
+            when(turmaRepository.findById(turmaId)).thenReturn(Optional.of(turma));
+            when(turma.getId()).thenReturn(turmaId);
+            when(turma.getNome()).thenReturn("Turma A");
+            when(turma.getSerie()).thenReturn(Serie.PRIMEIRO_EM);
+            when(turma.getDisciplinas()).thenReturn(List.of(disciplina));
+            when(disciplina.getNome()).thenReturn("Matemática");
 
-        verify(turmaRepository, never()).save(any());
+            DadosTurmaDetalhada resultado = turmaService.detalhar(turmaId);
+
+            assertAll(
+                    () -> assertNotNull(resultado),
+                    () -> assertEquals(turmaId, resultado.id()),
+                    () -> assertEquals("Turma A", resultado.nome()),
+                    () -> assertEquals(Serie.PRIMEIRO_EM, resultado.serie()),
+                    () ->assertEquals(List.of("Matemática"), resultado.disciplinas())
+            );
+        }
+
+        @Test
+        @DisplayName("Deve lançar exceção ao detalhar turma inexistente")
+        void deveLancarExcecaoAoDetalharTurmaInexistente(){
+            Long turmaId = 1L;
+
+            when(turmaRepository.findById(turmaId)).thenReturn(Optional.empty());
+
+            assertThrows(TurmaNaoEncontradaException.class, () -> turmaService.detalhar(turmaId));
+        }
     }
 
-    @Test
-    @DisplayName("Não deve adicionar disciplina duplicada")
-    void naoDeveAdicionarDisciplinaDuplicada(){
-        Long turmaId = 1L;
-        Long disciplinaId = 1L;
 
-        List<Disciplina> disciplinas = new ArrayList<>();
-        disciplinas.add(disciplina);
-
-        when(turmaRepository.findById(turmaId)).thenReturn(Optional.of(turma));
-        when(disciplinaRepository.findById(disciplinaId)).thenReturn(Optional.of(disciplina));
-        when(turma.getDisciplinas()).thenReturn(disciplinas);
-
-        assertThrows(RegraNegocioException.class, () -> turmaService.adicionarDisciplina(turmaId, disciplinaId));
-
-        verify(turmaRepository, never()).save(any());
-    }
-
-    @Test
-    @DisplayName("Deve listar disciplinas da turma")
-    void deveListarDisciplinasDaTurma(){
-        Long turmaId = 1L;
-
-        Disciplina disciplina1 = mock(Disciplina.class);
-        Disciplina disciplina2 = mock(Disciplina.class);
-
-        when(turmaRepository.findById(turmaId)).thenReturn(Optional.of(turma));
-        when(turma.getDisciplinas()).thenReturn(List.of(disciplina1, disciplina2));
-        when(disciplina1.getNome()).thenReturn("Matemática");
-        when(disciplina2.getNome()).thenReturn("Física");
-
-        List<String> resultado = turmaService.listarDisciplinas(turmaId);
-
-        assertAll(
-                () -> assertEquals(2, resultado.size()),
-                () -> assertTrue(resultado.contains("Matemática")),
-                () -> assertTrue(resultado.contains("Física"))
-        );
-    }
-
-    @Test
-    @DisplayName("Deve lançar exceção ao listar turma inexistente")
-    void deveLancarExcecaoAoListarTurmaInexistente(){
-        Long turmaId = 1L;
-
-        when(turmaRepository.findById(turmaId)).thenReturn(Optional.empty());
-
-        assertThrows(TurmaNaoEncontradaException.class, () -> turmaService.listarDisciplinas(turmaId));
-    }
-
-    @Test
-    @DisplayName("Deve detalhar turma")
-    void deveDetalharTurma(){
-        Long turmaId = 1L;
-
-        Disciplina disciplina = mock(Disciplina.class);
-
-        when(turmaRepository.findById(turmaId)).thenReturn(Optional.of(turma));
-        when(turma.getId()).thenReturn(turmaId);
-        when(turma.getNome()).thenReturn("Turma A");
-        when(turma.getSerie()).thenReturn(Serie.PRIMEIRO_EM);
-        when(turma.getDisciplinas()).thenReturn(List.of(disciplina));
-        when(disciplina.getNome()).thenReturn("Matemática");
-
-        DadosTurmaDetalhada resultado = turmaService.detalhar(turmaId);
-
-        assertAll(
-                () -> assertNotNull(resultado),
-                () -> assertEquals(turmaId, resultado.id()),
-                () -> assertEquals("Turma A", resultado.nome()),
-                () -> assertEquals(Serie.PRIMEIRO_EM, resultado.serie()),
-                () ->assertEquals(List.of("Matemática"), resultado.disciplinas())
-        );
-    }
-
-    @Test
-    @DisplayName("Deve lançar exceção ao detalhar turma inexistente")
-    void deveLancarExcecaoAoDetalharTurmaInexistente(){
-        Long turmaId = 1L;
-
-        when(turmaRepository.findById(turmaId)).thenReturn(Optional.empty());
-
-        assertThrows(TurmaNaoEncontradaException.class, () -> turmaService.detalhar(turmaId));
-    }
 }

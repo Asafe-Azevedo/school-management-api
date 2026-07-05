@@ -56,7 +56,7 @@ public class AlunoService {
                     return Integer.compare(t1.getAlunos().size(), t2.getAlunos().size());
                 })
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Nenhuma turma disponível"));
+                .orElseThrow(() -> new RegraNegocioException("Nenhuma turma disponível"));
 
 
         Aluno aluno = new Aluno(dadosCadastroAlunoss,

@@ -11,11 +11,13 @@ import com.school.api.endereco.EnderecoService;
 import com.school.api.endereco.dto.DadosEndereco;
 import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.infra.erros.alunos.AlunoNaoEncontradoException;
+import com.school.api.infra.erros.turmas.TurmaNaoEncontradaException;
 import com.school.api.turma.Serie;
 import com.school.api.turma.Turma;
 import com.school.api.turma.TurmaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,8 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -79,134 +80,167 @@ public class AlunoServiceTest {
         aluno = mock(Aluno.class);
     }
 
-    @Test
-    @DisplayName("Deve cadastrar com sucesso")
-    void deveCadastrarAlunoComSucesso(){
-        Turma turma = mock(Turma.class);
+    @Nested
+    @DisplayName("Cadastrar")
+    class Cadastrar{
 
-        when(alunoRepository.existsByCpf(anyString()))
-                .thenReturn(false);
-        when(enderecoService.preencherEndereco(any())).thenReturn(endereco);
-        when(turmaRepository.buscarTurmasOrdenadasPorSerieOrdenadas(any())).thenReturn(List.of(turma));
-        when(turma.getAlunos()).thenReturn(new ArrayList<>());
-        when(turma.getCapacidade()).thenReturn(40);
+        @Test
+        @DisplayName("Deve cadastrar com sucesso")
+        void deveCadastrarAlunoComSucesso(){
+            Turma turma = mock(Turma.class);
 
-        service.cadastrar(dadosCadastroAlunos);
+            when(alunoRepository.existsByCpf(anyString()))
+                    .thenReturn(false);
+            when(enderecoService.preencherEndereco(any())).thenReturn(endereco);
+            when(turmaRepository.buscarTurmasOrdenadasPorSerieOrdenadas(any())).thenReturn(List.of(turma));
+            when(turma.getAlunos()).thenReturn(new ArrayList<>());
+            when(turma.getCapacidade()).thenReturn(40);
 
-        verify(alunoRepository).save(any(Aluno.class));
+            service.cadastrar(dadosCadastroAlunos);
+
+            verify(alunoRepository).save(any(Aluno.class));
+        }
+
+        @Test
+        @DisplayName("Não deve cadastrar aluno com CPF duplicado")
+        void naoDeveCadastrarAlunoComCpfDuplicado(){
+            when(alunoRepository.existsByCpf(anyString())).thenReturn(true);
+
+            RegraNegocioException exception = assertThrows(RegraNegocioException.class, () -> service.cadastrar(dadosCadastroAlunos));
+            assertEquals("CPF já cadastrado", exception.getMessage());
+
+            verify(alunoRepository, never()).save(any(Aluno.class));
+        }
+
+        @Test
+        @DisplayName("Deve lançar exceção quando não existir turma disponível")
+        void deveLancarExcecaoQuandoNaoExistirTurmaDisponivel(){
+            when(alunoRepository.existsByCpf(anyString())).thenReturn(false);
+            when(enderecoService.preencherEndereco(any())).thenReturn(endereco);
+            when(turmaRepository.buscarTurmasOrdenadasPorSerieOrdenadas(any())).thenReturn(List.of());
+
+            assertThrows(RegraNegocioException.class, () -> service.cadastrar(dadosCadastroAlunos));
+
+            verify(alunoRepository, never()).save(any(Aluno.class));
+        }
     }
 
-    @Test
-    @DisplayName("Não deve cadastrar aluno com CPF duplicado")
-    void naoDeveCadastrarAlunoComCpfDuplicado(){
-        when(alunoRepository.existsByCpf(anyString())).thenReturn(true);
+    @Nested
+    @DisplayName("Atualizar")
+    class Atualizar{
 
-        assertThrows(RegraNegocioException.class, () -> service.cadastrar(dadosCadastroAlunos));
+        @Test
+        @DisplayName("Deve atualizar com sucesso")
+        void deveAtualizarComSucesso(){
+            Long id = 1L;
 
-        verify(alunoRepository, never()).save(any());
+            when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
+
+            DadosAtualizacaoAlunos dadosAtualizacaoAlunos = new DadosAtualizacaoAlunos(
+                    "Novo Nome",
+                    "novo@email.com",
+                    "11999999999",
+                    null
+            );
+
+            service.atualizar(id, dadosAtualizacaoAlunos);
+
+            verify(aluno).atualizarNome("Novo Nome");
+            verify(aluno).atualizarEmail("novo@email.com");
+            verify(aluno).atualizarTelefoneResponsavel("11999999999");
+
+        }
+
+        @Test
+        @DisplayName("Deve atualizar endereço do aluno")
+        void deveAtualizarEnderecoDoAluno(){
+            Long id = 1L;
+
+            when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
+            when(enderecoService.preencherEndereco(any())).thenReturn(endereco);
+
+            DadosAtualizacaoAlunos dados = new DadosAtualizacaoAlunos(
+                    null,
+                    null,
+                    null,
+                    endereco
+            );
+            service.atualizar(id, dados);
+
+            verify(aluno).atualizarEndereco(any(Endereco.class));
+        }
+
+        @Test
+        @DisplayName("Deve lançar exceção ao atualizar aluno inexistente")
+        void deveLancarExcecaoAoAtualizarAlunoInexistente(){
+            Long id = 1L;
+
+            when(alunoRepository.findById(id)).thenReturn(Optional.empty());
+
+            DadosAtualizacaoAlunos dados = new DadosAtualizacaoAlunos(
+                    "Novo nome",
+                    null,
+                    null,
+                    null
+            );
+
+            assertThrows(AlunoNaoEncontradoException.class, () -> service.atualizar(id, dados));
+        }
     }
 
-    @Test
-    @DisplayName("Deve lançar exceção quando não existir turma disponível")
-    void deveLancarExcecaoQuandoNaoExistirTurmaDisponivel(){
-        when(alunoRepository.existsByCpf(anyString())).thenReturn(false);
-        when(enderecoService.preencherEndereco(any())).thenReturn(endereco);
-        when(turmaRepository.buscarTurmasOrdenadasPorSerieOrdenadas(any())).thenReturn(List.of());
+    @Nested
+    @DisplayName("Excluir")
+    class Excluir{
 
-        assertThrows(RuntimeException.class, () -> service.cadastrar(dadosCadastroAlunos));
+        @Test
+        @DisplayName("Deve excluir alunos com sucesso")
+        void deveExcluirAlunosComSucesso(){
+            Long id = 1L;
 
-        verify(alunoRepository, never()).save(any());
+            when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
+
+            service.excluir(id);
+
+            verify(aluno).excluir();
+        }
+
+        @Test
+        @DisplayName("Deve lançar exceção ao excluir aluno inexistente")
+        void deveLancarExcecaoAoExcluirAlunoInexistente(){
+            Long id = 1L;
+
+            when(alunoRepository.findById(id)).thenReturn(Optional.empty());
+
+            assertThrows(AlunoNaoEncontradoException.class, () -> service.excluir(id));
+        }
     }
 
-    @Test
-    @DisplayName("Deve atualizar com sucesso")
-    void deveAtualizarComSucesso(){
-        Long id = 1L;
+    @Nested
+    @DisplayName("Detalhar")
+    class Detalhar{
 
-        when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
+        @Test
+        @DisplayName("Deve detalhar aluno com sucesso")
+        void deveDetalharAlunoComSucesso(){
+            Long id = 1L;
 
-        DadosAtualizacaoAlunos dadosAtualizacaoAlunos = new DadosAtualizacaoAlunos(
-                "Novo Nome",
-                "novo@email.com",
-                "11999999999",
-                null
-        );
+            when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
 
-        service.atualizar(id, dadosAtualizacaoAlunos);
+            DadosDetalhamentoAluno resultado = service.detalhar(id);
 
-        verify(aluno).atualizarNome("Novo Nome");
-        verify(aluno).atualizarEmail("novo@email.com");
-        verify(aluno).atualizarTelefoneResponsavel("11999999999");
+            assertNotNull(resultado);
+        }
 
+        @Test
+        @DisplayName("Deve lançar aluno ao detalhar aluno inexistente")
+        void deveLancarExcecaoAoDetalharAlunoInexistente(){
+            Long id = 1L;
+
+            when(alunoRepository.findById(id)).thenReturn(Optional.empty());
+
+            assertThrows(AlunoNaoEncontradoException.class, () -> service.detalhar(id));
+        }
     }
 
-    @Test
-    @DisplayName("Deve atualizar endereço do aluno")
-    void deveAtualizarEnderecoDoAluno(){
-        Long id = 1L;
 
-        when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
-        when(enderecoService.preencherEndereco(any())).thenReturn(endereco);
-
-        DadosAtualizacaoAlunos dados = new DadosAtualizacaoAlunos(
-                null,
-                null,
-                null,
-                endereco
-        );
-        service.atualizar(id, dados);
-
-        verify(aluno).atualizarEndereco(any(Endereco.class));
-    }
-
-    @Test
-    @DisplayName("Deve lançar exceção ao atualizar aluno inexistente")
-    void deveLancarExcecaoAoAtualizarAlunoInexistente(){
-        Long id = 1L;
-
-        when(alunoRepository.findById(id)).thenReturn(Optional.empty());
-
-        DadosAtualizacaoAlunos dados = new DadosAtualizacaoAlunos(
-                "Novo nome",
-                null,
-                null,
-                null
-        );
-
-        assertThrows(AlunoNaoEncontradoException.class, () -> service.atualizar(id, dados));
-    }
-
-    @Test
-    @DisplayName("Deve excluir alunos com sucesso")
-    void deveExcluirAlunosComSucesso(){
-        Long id = 1L;
-
-        when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
-
-        service.excluir(id);
-
-        verify(aluno).excluir();
-    }
-
-    @Test
-    @DisplayName("Deve lançar exceção ao excluir aluno inexistente")
-    void deveLancarExcecaoAoExcluirAlunoInexistente(){
-        Long id = 1L;
-
-        when(alunoRepository.findById(id)).thenReturn(Optional.empty());
-
-        assertThrows(AlunoNaoEncontradoException.class, () -> service.excluir(id));
-    }
-
-    @Test
-    @DisplayName("Deve detalhar aluno com sucesso")
-    void deveDetalharAlunoComSucesso(){
-        Long id = 1L;
-
-        when(alunoRepository.findById(id)).thenReturn(Optional.of(aluno));
-
-        DadosDetalhamentoAluno resultado = service.detalhar(id);
-
-        assertNotNull(resultado);
-    }
 }

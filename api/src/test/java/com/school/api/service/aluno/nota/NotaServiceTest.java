@@ -14,9 +14,10 @@ import com.school.api.turma.Turma;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class NotaServiceTest {
 
     @Mock
@@ -40,18 +42,21 @@ class NotaServiceTest {
     @InjectMocks
     private NotaService notaService;
 
+    private Aluno aluno;
+    private Turma turma;
+    private Disciplina disciplina;
+
     @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
+    void setUp(){
+        aluno = mock(Aluno.class);
+        turma = mock(Turma.class);
+        disciplina = mock(Disciplina.class);
     }
 
     @Test
-    @DisplayName("Deveria lançar nota com sucesso")
-    void deveriaLancarNotaComSucesso(){
+    @DisplayName("Deve lançar nota com sucesso")
+    void deveLancarNotaComSucesso(){
 
-        Aluno aluno = mock(Aluno.class);
-        Turma turma = mock(Turma.class);
-        Disciplina disciplina = mock(Disciplina.class);
         ArrayList<Disciplina> disciplinas = new ArrayList<>();
 
         disciplinas.add(disciplina);
@@ -81,12 +86,8 @@ class NotaServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria lançar exceção quando nota maior que dez")
-    void deveriaLancarExcecaoQuandoNotaMaiorQueDez(){
-
-        Aluno aluno = mock(Aluno.class);
-        Turma turma = mock(Turma.class);
-        Disciplina disciplina = mock(Disciplina.class);
+    @DisplayName("Deve lançar exceção quando nota maior que dez")
+    void deveLancarExcecaoQuandoNotaMaiorQueDez(){
 
         when(aluno.getTurma()).thenReturn(turma);
         when(turma.getDisciplinas()).thenReturn(List.of(disciplina));
@@ -106,7 +107,7 @@ class NotaServiceTest {
 
         assertEquals("Nota deve ser entre 0 e 10", exception.getMessage());
 
-        verify(notaRepository, never()).save(any());
+        verify(notaRepository, never()).save(any(Nota.class));
     }
 
 

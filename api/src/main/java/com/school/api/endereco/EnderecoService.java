@@ -1,5 +1,6 @@
 package com.school.api.endereco;
 
+import com.school.api.infra.erros.RegraNegocioException;
 import com.school.api.util.CepUtils;
 import com.school.api.endereco.dto.DadosEndereco;
 import com.school.api.endereco.dto.DtoViaCepResponse;
@@ -23,7 +24,7 @@ public class EnderecoService {
         );
 
         if (response == null || response.logradouro() == null) {
-            throw new RuntimeException("CEP inválido ou não encontrado");
+            throw new RegraNegocioException("CEP inválido ou não encontrado");
         }
 
         return new DadosEndereco(
