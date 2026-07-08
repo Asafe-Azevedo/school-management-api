@@ -1,10 +1,10 @@
-package com.school.api.integration.turma;
+package com.school.api.integration.repository.turma;
 
 
 import com.school.api.aluno.AlunoRepository;
-import com.school.api.support.factory.aluno.AlunoFactory;
-import com.school.api.support.factory.turma.TurmaFactory;
-import com.school.api.support.integration.BaseRepositoryIT;
+import com.school.api.integration.support.factory.aluno.AlunoFactory;
+import com.school.api.integration.support.factory.turma.TurmaFactory;
+import com.school.api.integration.support.integration.BaseRepositoryIT;
 import com.school.api.turma.Serie;
 import com.school.api.turma.TurmaRepository;
 import org.junit.jupiter.api.DisplayName;

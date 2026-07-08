@@ -1,4 +1,4 @@
-package com.school.api.support.util;
+package com.school.api.integration.support.util;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -28,12 +28,8 @@ public final class TestDataGenerator {
     }
 
     public static String cpf(int indice){
-        return String.format(
-                "%03d.%03d.%03d-%02d",
-                indice,
-                indice,
-                indice,
-                indice % 99
-        );
+        return String.format("%011d", indice);
     }
+
 }
+

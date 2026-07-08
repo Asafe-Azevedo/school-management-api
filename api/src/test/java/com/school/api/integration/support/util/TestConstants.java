@@ -1,4 +1,4 @@
-package com.school.api.support.util;
+package com.school.api.integration.support.util;
 
 import com.school.api.aluno.nota.TipoNota;
 import com.school.api.professores.Especialidade;
@@ -7,6 +7,8 @@ import com.school.api.turma.Serie;
 import java.time.LocalDate;
 
 public final class TestConstants {
+
+
 
     private TestConstants(){
 
@@ -31,6 +33,10 @@ public final class TestConstants {
     public static final String CIDADE = "São Paulo";
     public static final String UF = "SP";
 
+    public static final String NOME_PROFESSOR = "Jorge Vasconcelos";
+    public static final String EMAIL_PROFESSOR = "jorge@vasco.com";
+    public static final String TELEFONE = "11899999999";
+
     public static final Especialidade ESPECIALIDADE_PADRAO = Especialidade.MATEMATICA;
 
     public static final String NOME_DISCIPLINA = "Matemática";
@@ -40,6 +46,8 @@ public final class TestConstants {
     public static final Integer BIMESTRE = 1;
 
     public static final Long ID_INEXISTENTE = Long.MAX_VALUE;
+
+
 
 
 }

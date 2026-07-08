@@ -1,7 +1,11 @@
 package com.school.api.professores;
 
+import com.school.api.aluno.Aluno;
+import com.school.api.aluno.dto.DadosDetalhamentoAluno;
 import com.school.api.infra.erros.RegraNegocioException;
+import com.school.api.infra.erros.alunos.AlunoNaoEncontradoException;
 import com.school.api.infra.erros.professores.ProfessorNaoEncontradoException;
+import com.school.api.professores.dto.DadosDetalhamentoProfessor;
 import com.school.api.util.FormatadorUtils;
 import com.school.api.endereco.dto.DadosEndereco;
 import com.school.api.endereco.Endereco;
@@ -52,6 +56,12 @@ public class ProfessorService {
      public Page<DadosListagemProfessores> listar(Pageable pageable){
          return repository.findAllByAtivoTrue(pageable).map(DadosListagemProfessores::new);
      }
+
+    public DadosDetalhamentoProfessor detalhar(Long id){
+        Professor professor = repository.findById(id).orElseThrow(ProfessorNaoEncontradoException::new);
+        return new DadosDetalhamentoProfessor(professor);
+
+    }
 
      @Transactional
      public Professor atualizar(Long id, DadosAtualizacaoProfessores dadosAtualizacaoProfessores){

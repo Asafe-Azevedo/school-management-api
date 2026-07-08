@@ -1,10 +1,10 @@
-package com.school.api.integration.aluno;
+package com.school.api.integration.repository.aluno;
 
 import com.school.api.aluno.AlunoRepository;
-import com.school.api.support.factory.EnderecoFactory;
-import com.school.api.support.factory.aluno.AlunoFactory;
-import com.school.api.support.integration.BaseRepositoryIT;
-import com.school.api.support.util.TestConstants;
+import com.school.api.integration.support.factory.EnderecoFactory;
+import com.school.api.integration.support.factory.aluno.AlunoFactory;
+import com.school.api.integration.support.integration.BaseRepositoryIT;
+import com.school.api.integration.support.util.TestConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

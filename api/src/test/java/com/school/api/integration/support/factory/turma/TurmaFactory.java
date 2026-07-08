@@ -1,13 +1,10 @@
-package com.school.api.support.factory.turma;
+package com.school.api.integration.support.factory.turma;
 
-import com.school.api.aluno.disciplina.Disciplina;
-import com.school.api.support.util.TestConstants;
-import com.school.api.support.util.TestDataGenerator;
+import com.school.api.integration.support.util.TestDataGenerator;
 import com.school.api.turma.Serie;
 import com.school.api.turma.Turma;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public final class TurmaFactory {
 

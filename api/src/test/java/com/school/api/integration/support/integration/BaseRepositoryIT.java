@@ -1,4 +1,4 @@
-package com.school.api.support.integration;
+package com.school.api.integration.support.integration;
 
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;

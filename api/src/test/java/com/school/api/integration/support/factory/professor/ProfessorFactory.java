@@ -1,13 +1,9 @@
-package com.school.api.support.factory.professor;
+package com.school.api.integration.support.factory.professor;
 
-import com.school.api.endereco.Endereco;
-import com.school.api.professores.Especialidade;
+import com.school.api.integration.support.util.TestDataGenerator;
 import com.school.api.professores.Professor;
-import com.school.api.support.factory.EnderecoFactory;
-import com.school.api.support.util.TestConstants;
-import com.school.api.support.util.TestDataGenerator;
-
-import java.util.concurrent.atomic.AtomicInteger;
+import com.school.api.integration.support.factory.EnderecoFactory;
+import com.school.api.integration.support.util.TestConstants;
 
 public final class ProfessorFactory {
 

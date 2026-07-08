@@ -1,5 +1,6 @@
 package com.school.api.professores;
 
+import com.school.api.aluno.dto.DadosDetalhamentoAluno;
 import com.school.api.professores.dto.DadosAtualizacaoProfessores;
 import com.school.api.professores.dto.DadosCadastroProfessores;
 import com.school.api.professores.dto.DadosDetalhamentoProfessor;
@@ -64,6 +65,19 @@ public class ProfessorController {
         return ResponseEntity.ok(service.listar(pageable));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
+    @Operation(
+            summary = "Detalhar professor",
+            description = "Retorna os dados básicos de um professor a partir de seu identificador"
+    )
+    @ApiResponse(responseCode = "200", description = "Professor encontrado")
+    @ApiResponse(responseCode = "404", description = "Professor não  encontrado")
+    @GetMapping("/{id}")
+    public ResponseEntity<DadosDetalhamentoProfessor> detalhar(@PathVariable Long id){
+        return ResponseEntity.ok(service.detalhar(id));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSOR')")
     @PutMapping("/{id}")
     @Operation(
             summary = "Atualizar professor",

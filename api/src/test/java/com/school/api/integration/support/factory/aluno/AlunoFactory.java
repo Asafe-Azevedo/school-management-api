@@ -1,10 +1,9 @@
-package com.school.api.support.factory.aluno;
+package com.school.api.integration.support.factory.aluno;
 
 import com.school.api.aluno.Aluno;
-import com.school.api.endereco.Endereco;
-import com.school.api.support.factory.EnderecoFactory;
-import com.school.api.support.util.TestDataGenerator;
-import com.school.api.support.util.TestConstants;
+import com.school.api.integration.support.util.TestDataGenerator;
+import com.school.api.integration.support.factory.EnderecoFactory;
+import com.school.api.integration.support.util.TestConstants;
 
 public final class AlunoFactory {
 

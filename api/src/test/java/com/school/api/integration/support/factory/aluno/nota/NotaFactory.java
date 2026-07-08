@@ -1,10 +1,10 @@
-package com.school.api.support.factory.aluno.nota;
+package com.school.api.integration.support.factory.aluno.nota;
 
 import com.school.api.aluno.Aluno;
 import com.school.api.aluno.disciplina.Disciplina;
 import com.school.api.aluno.nota.Nota;
 import com.school.api.aluno.nota.TipoNota;
-import com.school.api.support.util.TestConstants;
+import com.school.api.integration.support.util.TestConstants;
 
 public final class NotaFactory {
 

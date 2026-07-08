@@ -1,10 +1,10 @@
-package com.school.api.integration.aluno.disciplina;
+package com.school.api.integration.repository.aluno.disciplina;
 
 import com.school.api.aluno.disciplina.DisciplinaRepository;
 import com.school.api.professores.ProfessorRepository;
-import com.school.api.support.factory.aluno.disciplina.DisciplinaFactory;
-import com.school.api.support.factory.professor.ProfessorFactory;
-import com.school.api.support.integration.BaseRepositoryIT;
+import com.school.api.integration.support.factory.aluno.disciplina.DisciplinaFactory;
+import com.school.api.integration.support.factory.professor.ProfessorFactory;
+import com.school.api.integration.support.integration.BaseRepositoryIT;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
-package com.school.api.support.factory;
+package com.school.api.integration.support.factory;
 
 import com.school.api.endereco.Endereco;
-import com.school.api.support.util.TestConstants;
+import com.school.api.integration.support.util.TestConstants;
 
 public final class EnderecoFactory {
 

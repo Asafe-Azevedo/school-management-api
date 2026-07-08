@@ -1,9 +1,9 @@
-package com.school.api.support.factory.aluno.disciplina;
+package com.school.api.integration.support.factory.aluno.disciplina;
 
 import com.school.api.aluno.disciplina.Disciplina;
+import com.school.api.integration.support.util.TestDataGenerator;
 import com.school.api.professores.Professor;
-import com.school.api.support.util.TestConstants;
-import com.school.api.support.util.TestDataGenerator;
+import com.school.api.integration.support.util.TestConstants;
 
 public final class DisciplinaFactory {
 
